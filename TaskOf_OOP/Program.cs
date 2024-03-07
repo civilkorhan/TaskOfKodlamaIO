@@ -1,4 +1,7 @@
 
+using Business.Abstract;
+using Business.Concrete;
+
 namespace TaskOf_OOP
 {
     public class Program
@@ -13,6 +16,9 @@ namespace TaskOf_OOP
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+            builder.Services.AddSingleton<ICourseService, CourseManager>();
+            builder.Services.AddSingleton<ICategoryService, CategoryManager>();
+            builder.Services.AddSingleton<IInstructorService, InstructorManager>();
 
             var app = builder.Build();
 

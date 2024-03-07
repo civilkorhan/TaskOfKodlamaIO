@@ -10,4 +10,5 @@ namespace Entities.Concrete;
 public class Course:BaseEntities<int>
 
 {
+    public string  Description { get; set; }
 }

@@ -1,4 +1,4 @@
-﻿namespace Business.Abstract;
+﻿namespace Business.Dtos;
 
 public class CreatedCategoryResponse
 {
