@@ -26,8 +26,7 @@ public class InstructorDal : IInstructorDal
 
     public void Delete(Instructor ınstructor)
     {
-        //int x=ınstructor.Id;
-        //_instructors.Remove(x);
+        _instructors.Remove(ınstructor);
     }
 
     public List<Instructor> GetAll()
@@ -35,8 +34,16 @@ public class InstructorDal : IInstructorDal
         return _instructors;
     }
 
-    public void Update(Instructor ınstructor)
+    public void Update(Instructor updtInstructor)
     {
-        //_instructors=
+        foreach (var instructor in _instructors)
+        {
+            if (instructor.Id == updtInstructor.Id)
+            {
+                instructor.Name = updtInstructor.Name;
+                instructor.LastName = updtInstructor.LastName;
+                instructor.UpdateDate = updtInstructor.CreatedDate;
+            }
+        }
     }
 }

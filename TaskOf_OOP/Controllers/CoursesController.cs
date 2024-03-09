@@ -1,5 +1,6 @@
 ﻿using Business.Abstract;
-using Business.Dtos;
+using Business.Dtos.Category;
+using Business.Dtos.Course;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,13 +19,25 @@ namespace TaskOf_OOP.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            return Ok(_courseService.GetAll());
+            return Ok(_courseService.GetAllCourse());
         }
         [HttpPost]
         public IActionResult Add(CreatCourseRequest creatCourseRequest)
         {
             CreatedCourseResponse createdCourseResponse = _courseService.Add(creatCourseRequest);
                 return Ok(createdCourseResponse);   
+        }
+        [HttpDelete]
+        public IActionResult Delete(DeleteCourseRequest deleteCourseRequest)
+        {
+           DeletedCourseResponse deletedCourseResponse = _courseService.Delete(deleteCourseRequest);
+            return Ok(deleteCourseRequest);
+        }
+        [HttpPut]
+        public IActionResult Update(UpdateCourseRequest updateCourseRequest)
+        {
+            UpdatedCourseResponse updatedCourseResponse = _courseService.Update(updateCourseRequest);
+            return Ok(updateCourseRequest);
         }
     }
 }

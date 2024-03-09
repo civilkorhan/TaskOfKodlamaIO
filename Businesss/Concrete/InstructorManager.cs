@@ -1,5 +1,5 @@
 ﻿using Business.Abstract;
-using Business.Dtos;
+using Business.Dtos.Inscructor;
 using DataAcces.Abstract;
 using Entities.Concrete;
 using System;
@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CreatedInstructorResponse = Business.Dtos.Inscructor.CreatedInstructorResponse;
 
 namespace Business.Concrete;
 
@@ -19,10 +20,10 @@ public class InstructorManager : IInstructorService
         _instructorDal = instructorDal;
 
     }
-
+    Instructor instructor = new();
     public CreatedInstructorResponse Add(CreatInstructorRequest creatInstructorRequest)
     {
-        Instructor instructor = new();
+       
         instructor.Name = creatInstructorRequest.Name;
         instructor.LastName = creatInstructorRequest.LastName;  
         instructor.CreatedDate=DateTime.Now;
@@ -40,18 +41,29 @@ public class InstructorManager : IInstructorService
         
     }
 
-    public CreatedInstructorResponse Delete(Instructor ınstructor)
+   
+
+    public DeletedInstructorResponse Delete(DeleteInstructorRequest deleteInstructorRequest)
     {
-        throw new NotImplementedException();
+        instructor.Name = deleteInstructorRequest.Name;
+        instructor.LastName = deleteInstructorRequest.LastName;
+        instructor.DeletedDate=DateTime.Now;
+        _instructorDal.Delete(instructor);
+        DeletedInstructorResponse deletedInstructorResponse = new DeletedInstructorResponse();
+        deletedInstructorResponse.Name=deleteInstructorRequest.Name;
+        deletedInstructorResponse.LastName=deleteInstructorRequest.LastName;
+        deletedInstructorResponse.Id=instructor.Id;
+        return deletedInstructorResponse;
+        
     }
 
-    public List<CreatedInstructorResponse> GetAll()
+    public List<GetAllInstructorResponse> GetAll()
     {
         List<Instructor> ınstructors= _instructorDal.GetAll();
-        List<CreatedInstructorResponse> createdInstructorResponses= new List<CreatedInstructorResponse>();
+        List<GetAllInstructorResponse> createdInstructorResponses= new List<GetAllInstructorResponse>();
         foreach (var instructor in ınstructors)
         {
-            CreatedInstructorResponse createdInstructorResponse= new CreatedInstructorResponse();
+            GetAllInstructorResponse createdInstructorResponse= new GetAllInstructorResponse();
             createdInstructorResponse.Id=instructor.Id;
             createdInstructorResponse.Name = instructor.Name;
             createdInstructorResponse.LastName = instructor.LastName;
@@ -63,8 +75,31 @@ public class InstructorManager : IInstructorService
         return createdInstructorResponses;  
     }
 
-    public CreatedInstructorResponse Update(Instructor ınstructor)
+    
+
+    public UpdatedInstructorResponse Update(UpdateInstructorRequest updateInstructorRequest)
     {
-        throw new NotImplementedException();
+        List<Instructor> instructors = _instructorDal.GetAll();
+       
+        foreach (var instructor in instructors)
+        {
+            if (instructor.Id == updateInstructorRequest.Id)
+            {
+                instructor.Name = updateInstructorRequest.Name;
+                instructor.LastName=updateInstructorRequest.LastName;
+                instructor.UpdateDate = DateTime.Now;
+            }
+
+        }
+        UpdatedInstructorResponse updatedInstructorResponse = new UpdatedInstructorResponse();
+        updatedInstructorResponse.Name=updateInstructorRequest.Name;
+        updatedInstructorResponse.LastName=updateInstructorRequest.LastName;
+        updatedInstructorResponse.Id=updateInstructorRequest.Id;    
+
+        return updatedInstructorResponse;
+
+
     }
+
+    
 }

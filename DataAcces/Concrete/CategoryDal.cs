@@ -24,7 +24,7 @@ public class CategoryDal : ICategoryDal
 
     public void Delete(Category category)
     {
-        throw new NotImplementedException();
+        _categories.Remove(category);
     }
 
     public List<Category> GetAll()
@@ -32,8 +32,16 @@ public class CategoryDal : ICategoryDal
         return _categories; 
     }
 
-    public void Update(Category category)
+    public void Update(Category updtCategory)
     {
-        throw new NotImplementedException();
+       foreach (var category in _categories) 
+       { 
+          if(category.Id == updtCategory.Id)
+            {
+                category.Name = updtCategory.Name;
+                category.UpdateDate = updtCategory.CreatedDate;
+                
+            }
+       }
     }
 }

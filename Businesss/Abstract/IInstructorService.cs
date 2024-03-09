@@ -1,4 +1,4 @@
-﻿using Business.Dtos;
+﻿using Business.Dtos.Inscructor;
 using Entities.Concrete;
 using System;
 using System.Collections.Generic;
@@ -11,8 +11,8 @@ namespace Business.Abstract;
 public interface IInstructorService
 {
     CreatedInstructorResponse Add(CreatInstructorRequest creatInstructorRequest);
-    List<CreatedInstructorResponse> GetAll();
-    CreatedInstructorResponse Delete(Instructor ınstructor);
-    CreatedInstructorResponse Update(Instructor ınstructor);
+    List<GetAllInstructorResponse> GetAll();
+    DeletedInstructorResponse Delete(DeleteInstructorRequest  deleteInstructorRequest);
+    UpdatedInstructorResponse Update(UpdateInstructorRequest updateInstructorRequest);
     
 }

@@ -30,7 +30,7 @@ public class CourseDal : ICourseDal
 
     public void Delete(Course course)
     {
-        throw new NotImplementedException();
+        _courses.Remove(course);
     }
 
     public List<Course> GetAll()
@@ -38,8 +38,16 @@ public class CourseDal : ICourseDal
         return _courses;    
     }
 
-    public void Update(Course course)
+    public void Update(Course updtCourse)
     {
-        throw new NotImplementedException();
+        foreach (var course in _courses)
+        {
+            if (updtCourse.Id ==course.Id)
+            {
+                course.Name = updtCourse.Name;
+                course.Description = updtCourse.Description;
+                course.UpdateDate = updtCourse.CreatedDate;
+            }
+        }
     }
 }

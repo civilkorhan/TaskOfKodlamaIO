@@ -1,5 +1,5 @@
 ﻿using Business.Abstract;
-using Business.Dtos;
+using Business.Dtos.Category;
 using DataAcces.Abstract;
 using Entities.Concrete;
 using System;
@@ -18,11 +18,11 @@ public class CategoryManager : ICategoryService
     {
         _categoryDal = categoryDal;
     }
-
+    Category category = new();
     public CreatedCategoryResponse Add(CreatCategoryRequest creatCategoryRequest)
     {
         // kontrol kodları yazılır 
-        Category category = new();
+       
         category.Name = creatCategoryRequest.Name;
         category.CreatedDate = DateTime.Now;
         _categoryDal.Add(category);    
@@ -34,18 +34,54 @@ public class CategoryManager : ICategoryService
     
     }
 
-    public List<CreatedCategoryResponse> GetAll()
+    public DeletedCategoryResponse Delete(DeleteCategoryRequest deleteCategoryRequest)
+    {
+        category.Name = deleteCategoryRequest.Name;
+        category.DeletedDate = DateTime.Now;
+        _categoryDal.Delete(category);
+        
+        DeletedCategoryResponse deletedCategoryResponse = new DeletedCategoryResponse();
+        deletedCategoryResponse.Id=category.Id;
+        deletedCategoryResponse.Name = category.Name;
+        return deletedCategoryResponse;
+
+    }
+
+    
+
+    public UpdatedCategoryResponse Update(UpdateCategoryRequest updateCategoryRequest)
+    {   List<Category>categories = _categoryDal.GetAll();
+        foreach (var category in categories)
+        {
+            if ( category.Id==updateCategoryRequest.Id)
+            {
+                category.Name = updateCategoryRequest.Name;
+                category.UpdateDate = DateTime.Now;
+                
+            }
+        }
+        UpdatedCategoryResponse updatedCategoryResponse = new UpdatedCategoryResponse();
+        updatedCategoryResponse.Id=updateCategoryRequest.Id;    
+        updatedCategoryResponse.Name=updateCategoryRequest.Name;
+        updatedCategoryResponse.UpdateDate=DateTime.Now;
+
+        return updatedCategoryResponse;
+    }
+
+   
+
+    public List<GetAllCategoryResponse> GetAllCategories()
     {
         List<Category> categoryList = _categoryDal.GetAll();
-        List<CreatedCategoryResponse> createdCategoryResponses = new List<CreatedCategoryResponse>();
+       List<GetAllCategoryResponse> allCategories = new List<GetAllCategoryResponse>();
         foreach (var category in categoryList)
         {
-            CreatedCategoryResponse createdCategoryResponse = new CreatedCategoryResponse();
-            createdCategoryResponse.Id = category.Id;
-            createdCategoryResponse.Name = category.Name;
+            GetAllCategoryResponse allCategoryResponse = new GetAllCategoryResponse();
+            allCategoryResponse.Id = category.Id;
+            allCategoryResponse.Name = category.Name;
 
-            createdCategoryResponses.Add(createdCategoryResponse);  // ekledik
+            allCategories.Add(allCategoryResponse);  // ekledik
         }
-        return createdCategoryResponses;    
+        return allCategories;
     }
 }

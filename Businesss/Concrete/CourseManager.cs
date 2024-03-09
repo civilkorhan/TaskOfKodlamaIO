@@ -1,5 +1,5 @@
 ﻿using Business.Abstract;
-using Business.Dtos;
+using Business.Dtos.Course;
 using DataAcces.Abstract;
 using Entities.Concrete;
 using System;
@@ -18,11 +18,11 @@ public class CourseManager : ICourseService
     {
         _courseDal = courseDal;
     }
-
+    Course course = new();
     public CreatedCourseResponse Add(CreatCourseRequest creatCourseRequest)
     {
         // kontrol kodları yazılır
-        Course course = new();
+        
         course.Name = creatCourseRequest.Name;
         course.Description = creatCourseRequest.Description;    
         _courseDal.Add(course);
@@ -36,19 +36,51 @@ public class CourseManager : ICourseService
 
     }
 
-    public List<CreatedCourseResponse> GetAll()
+    public DeletedCourseResponse Delete(DeleteCourseRequest deleteCourseRequest)
     {
-        List<Course> courses=_courseDal.GetAll();
-        List<CreatedCourseResponse> createdCourseResponses = new List<CreatedCourseResponse>(); 
-        foreach (var course in courses) 
-        { 
-          CreatedCourseResponse courseResponse = new CreatedCourseResponse();
-            courseResponse.Id = course.Id;
-            courseResponse.Name = course.Name;
-            courseResponse.Description = course.Description;
+        course.Name = deleteCourseRequest.Name;
+        course.DeletedDate= DateTime.Now;
+        _courseDal.Delete(course);
 
-            createdCourseResponses.Add(courseResponse);
+        DeletedCourseResponse deletedCourseResponse = new DeletedCourseResponse();
+        deletedCourseResponse.Name=deleteCourseRequest.Name;
+        deletedCourseResponse.Id =course.Id;
+        deletedCourseResponse.Description=course.Description;
+
+        return deletedCourseResponse;
+    }
+
+   
+
+    public UpdatedCourseResponse Update(UpdateCourseRequest updateCourseRequest)
+    {
+        List<Course> courses = _courseDal.GetAll();
+        UpdatedCourseResponse updatedCourseResponse = new UpdatedCourseResponse();  
+        foreach (var course in courses)
+        {
+            if (course.Id == updateCourseRequest.Id)
+            {
+                updatedCourseResponse.Name = updateCourseRequest.Name;
+                updatedCourseResponse.UpdateDate = DateTime.Now;
+            }
         }
-        return createdCourseResponses;  
+        return updatedCourseResponse;
+
+    }
+
+    public List<GetAllCourseResponse> GetAllCourse()
+    {
+        List<Course> courses= _courseDal.GetAll();
+        List<GetAllCourseResponse> getAllCourseResponses = new List<GetAllCourseResponse>();
+        foreach (var course in courses)
+        {
+            GetAllCourseResponse getAllCourseResponse = new GetAllCourseResponse();
+            getAllCourseResponse.Name=course.Name;
+            getAllCourseResponse.Id = course.Id;
+            getAllCourseResponse.CreatedDate = DateTime.Now;
+            
+            getAllCourseResponses.Add(getAllCourseResponse);    
+        }
+        return getAllCourseResponses;   
     }
 }

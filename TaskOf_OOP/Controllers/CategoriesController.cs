@@ -1,5 +1,5 @@
 ﻿using Business.Abstract;
-using Business.Dtos;
+using Business.Dtos.Category;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -25,8 +25,19 @@ namespace TaskOf_OOP.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            return Ok(_categoryService.GetAll());
+            return Ok(_categoryService.GetAllCategories());
 
+        }
+        [HttpDelete] 
+        public IActionResult Delete(DeleteCategoryRequest deleteCategoryRequest)
+        {
+            DeletedCategoryResponse deletedCategoryResponse = _categoryService.Delete(deleteCategoryRequest);
+            return Ok(deletedCategoryResponse);
+        }
+        [HttpPut]
+        public IActionResult Update(UpdateCategoryRequest updateCategoryRequest) 
+        {  UpdatedCategoryResponse updatedCategoryResponse=_categoryService.Update(updateCategoryRequest);
+            return Ok(updatedCategoryResponse);
         }
     }
 }
